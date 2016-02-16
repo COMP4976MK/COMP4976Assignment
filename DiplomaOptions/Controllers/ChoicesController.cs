@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using DiplomaDataModel.CourseOption;
+using DiplomaDataModel.CourseOption.Seed;
 
 namespace DiplomaOptions.Controllers
 {
@@ -39,10 +40,12 @@ namespace DiplomaOptions.Controllers
         // GET: Choices/Create
         public ActionResult Create()
         {
-            ViewBag.FirstChoiceOptionId = new SelectList(db.Options, "OptionId", "Title");
-            ViewBag.FourthChoiceOptionId = new SelectList(db.Options, "OptionId", "Title");
-            ViewBag.SecondChoiceOptionId = new SelectList(db.Options, "OptionId", "Title");
-            ViewBag.ThirdChoiceOptionId = new SelectList(db.Options, "OptionId", "Title");
+            var options = db.Options.Where(p => p.IsActive);
+
+            ViewBag.FirstChoiceOptionId = new SelectList(options, "OptionId", "Title");
+            ViewBag.FourthChoiceOptionId = new SelectList(options, "OptionId", "Title");
+            ViewBag.SecondChoiceOptionId = new SelectList(options, "OptionId", "Title");
+            ViewBag.ThirdChoiceOptionId = new SelectList(options, "OptionId", "Title");
             ViewBag.YearTermId = new SelectList(db.YearTerms, "YearTermId", "YearTermId");
             return View();
         }
@@ -52,10 +55,12 @@ namespace DiplomaOptions.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ChoiceId,YearTermId,StudentId,StudentFirstName,StudentLastName,FirstChoiceOptionId,SecondChoiceOptionId,ThirdChoiceOptionId,FourthChoiceOptionId,SelectionDate")] Choice choice)
+        public ActionResult Create([Bind(Include = "YearTermId,StudentId,StudentFirstName,StudentLastName,FirstChoiceOptionId,SecondChoiceOptionId,ThirdChoiceOptionId,FourthChoiceOptionId,SelectionDate")] Choice choice)
         {
+           
             if (ModelState.IsValid)
             {
+                choice.SelectionDate = DateTime.Now;
                 db.Choices.Add(choice);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -72,6 +77,8 @@ namespace DiplomaOptions.Controllers
         // GET: Choices/Edit/5
         public ActionResult Edit(int? id)
         {
+            var options = db.Options.Where(p => p.IsActive);
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -81,10 +88,10 @@ namespace DiplomaOptions.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.FirstChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.FirstChoiceOptionId);
-            ViewBag.FourthChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.FourthChoiceOptionId);
-            ViewBag.SecondChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.SecondChoiceOptionId);
-            ViewBag.ThirdChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.ThirdChoiceOptionId);
+            ViewBag.FirstChoiceOptionId = new SelectList(options, "OptionId", "Title", choice.FirstChoiceOptionId);
+            ViewBag.FourthChoiceOptionId = new SelectList(options, "OptionId", "Title", choice.FourthChoiceOptionId);
+            ViewBag.SecondChoiceOptionId = new SelectList(options, "OptionId", "Title", choice.SecondChoiceOptionId);
+            ViewBag.ThirdChoiceOptionId = new SelectList(options, "OptionId", "Title", choice.ThirdChoiceOptionId);
             ViewBag.YearTermId = new SelectList(db.YearTerms, "YearTermId", "YearTermId", choice.YearTermId);
             return View(choice);
         }

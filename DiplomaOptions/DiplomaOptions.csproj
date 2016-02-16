@@ -199,6 +199,7 @@
     <Compile Include="Controllers\ChoicesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\YearTermsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -281,6 +282,14 @@
     <Content Include="Views\Choices\EditorTemplates\SecondChoiceDropDown.cshtml" />
     <Content Include="Views\Choices\EditorTemplates\FourthChoiceDropDown.cshtml" />
     <Content Include="Views\Choices\EditorTemplates\ThirdChoiceDropDown.cshtml" />
+    <Content Include="Views\YearTerms\Create.cshtml" />
+    <Content Include="Views\YearTerms\Delete.cshtml" />
+    <Content Include="Views\YearTerms\Details.cshtml" />
+    <Content Include="Views\YearTerms\Edit.cshtml" />
+    <Content Include="Views\YearTerms\Index.cshtml" />
+    <Content Include="Views\YearTerms\Choose.cshtml" />
+    <Content Include="Views\YearTerms\EditorTemplates\YearDropDown.cshtml" />
+    <Content Include="Views\YearTerms\EditorTemplates\TermDropDown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

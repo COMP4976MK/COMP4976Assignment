@@ -4,11 +4,13 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Web.Mvc;
 using DiplomaDataModel.CourseOption.CustomValidation;
+using System.ComponentModel;
 
 namespace DiplomaDataModel.CourseOption
 {
     public class Choice
     {
+
         [HiddenInput(DisplayValue = false)]
         public int ChoiceId { get; set; }
 
@@ -18,6 +20,7 @@ namespace DiplomaDataModel.CourseOption
         [ForeignKey("YearTermId")]
         public YearTerm YearTerm { get; set; }
 
+        [ReadOnly(true)]
         [Display(Name = "Student Number: ")]
         [StartWith("A00", ErrorMessage = "Student ID needs to start with A00")]
         [MaxLength(9, ErrorMessage = "Max Legnth 9 Characters")]

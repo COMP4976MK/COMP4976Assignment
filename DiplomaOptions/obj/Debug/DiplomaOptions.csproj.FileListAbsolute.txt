@@ -1,4 +1,3 @@
-C:\Users\Kamil\Desktop\OptionsWebsite\DiplomaOptions\obj\Debug\DiplomaOptions.csprojResolveAssemblyReference.cache
 C:\Users\Kamil\Desktop\OptionsWebsite\DiplomaOptions\bin\ApplicationInsights.config
 C:\Users\Kamil\Desktop\OptionsWebsite\DiplomaOptions\bin\roslyn\csc.exe
 C:\Users\Kamil\Desktop\OptionsWebsite\DiplomaOptions\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -80,7 +79,8 @@ C:\Users\Kamil\Desktop\OptionsWebsite\DiplomaOptions\bin\Microsoft.Owin.Security
 C:\Users\Kamil\Desktop\OptionsWebsite\DiplomaOptions\bin\Microsoft.Owin.Security.Google.xml
 C:\Users\Kamil\Desktop\OptionsWebsite\DiplomaOptions\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\Kamil\Desktop\OptionsWebsite\DiplomaOptions\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-C:\Users\Kamil\Desktop\OptionsWebsite\DiplomaOptions\obj\Debug\DiplomaOptions.dll
-C:\Users\Kamil\Desktop\OptionsWebsite\DiplomaOptions\obj\Debug\DiplomaOptions.pdb
+C:\Users\Kamil\Desktop\OptionsWebsite\DiplomaOptions\obj\Debug\DiplomaOptions.csprojResolveAssemblyReference.cache
 C:\Users\Kamil\Desktop\OptionsWebsite\DiplomaOptions\obj\Debug\DiplomaOptions.Migrations.CourseOptionMigrations.InitialCreate.resources
 C:\Users\Kamil\Desktop\OptionsWebsite\DiplomaOptions\obj\Debug\DiplomaOptions.csproj.GenerateResource.Cache
+C:\Users\Kamil\Desktop\OptionsWebsite\DiplomaOptions\obj\Debug\DiplomaOptions.dll
+C:\Users\Kamil\Desktop\OptionsWebsite\DiplomaOptions\obj\Debug\DiplomaOptions.pdb

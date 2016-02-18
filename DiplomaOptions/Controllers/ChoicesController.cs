@@ -39,11 +39,6 @@ namespace DiplomaOptions.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.FirstChoiceOption = choice.FirstChoiceOptionId;
-            ViewBag.FourthChoiceOption = choice.FourthChoiceOptionId;
-            ViewBag.SecondChoiceOption = choice.SecondChoiceOptionId;
-            ViewBag.ThirdChoiceOption = choice.ThirdChoiceOptionId;
-            ViewBag.YearTermId = choice.YearTermId;
             return View(choice);
         }
 
@@ -53,12 +48,27 @@ namespace DiplomaOptions.Controllers
         {
             var options = db.Options.Where(p => p.IsActive);
             var yearTerm = db.YearTerms.FirstOrDefault(p => p.IsDefault);
-
+            string term;
             string currentUserId = User.Identity.GetUserId();
             ApplicationUser currentUser = userdb.Users.FirstOrDefault(x => x.Id == currentUserId);
             ViewBag.StudentId = currentUser.UserName;
 
-            ViewBag.YearTerm = yearTerm.Year + " " + yearTerm.Term;
+            switch (yearTerm.Term)
+            {
+                case 10:
+                    term = "Winter";
+                    break;
+                case 20:
+                    term = "Spring/Summer";
+                    break;
+                case 30:
+                    term = "Fall";
+                    break;
+                default:
+                    term = "Chaos";
+                    break;
+            }
+            ViewBag.YearTerm = term + " " + yearTerm.Year;
             ViewBag.FirstChoiceOptionId = new SelectList(options, "OptionId", "Title");
             ViewBag.FourthChoiceOptionId = new SelectList(options, "OptionId", "Title");
             ViewBag.SecondChoiceOptionId = new SelectList(options, "OptionId", "Title");
@@ -75,18 +85,38 @@ namespace DiplomaOptions.Controllers
         [Authorize(Roles = "Student, Admin")]
         public ActionResult Create([Bind(Include = "StudentId,StudentFirstName,StudentLastName,FirstChoiceOptionId,SecondChoiceOptionId,ThirdChoiceOptionId,FourthChoiceOptionId")] Choice choice)
         {
+            string term;
             bool choicesDiff;
-            bool notEntered = true;
+            bool notEntered;
 
             var yearTerm = db.YearTerms.FirstOrDefault(p => p.IsDefault);
 
             var choiceTable = db.Choices.FirstOrDefault(c => c.YearTermId == yearTerm.YearTermId);
 
-            //look 
-            if (choiceTable.YearTermId != null) { 
+            switch (yearTerm.Term)
+            {
+                case 10:
+                    term = "Winter";
+                    break;
+                case 20:
+                    term = "Spring/Summer";
+                    break;
+                case 30:
+                    term = "Fall";
+                    break;
+                default:
+                    term = "Chaos";
+                    break;
+            };
+          
+            //look if year term is already in table if 
+            if (choiceTable != null) { 
                 
                  notEntered = false;
                 
+            } else
+            {
+                notEntered = true;
             }
 
             //Checking if the choices are different from each other
@@ -104,32 +134,37 @@ namespace DiplomaOptions.Controllers
             if (ModelState.IsValid)
             {
                 //if choices are different and not entered in year/term already else give back error
-                if(choicesDiff)
+                if (choicesDiff)
                 {
-                    if(notEntered)
+                    if (notEntered)
                     {
                         choice.YearTermId = yearTerm.YearTermId;
                         choice.SelectionDate = DateTime.Now;
                         db.Choices.Add(choice);
                         db.SaveChanges();
                         return RedirectToAction("Index");
-                    } else
-                    {
-                        ViewData["term_error"] = "Already entered into term!";
                     }
-                } else
-                {
-                    ViewData["choice_error"] = "Cannot choose a course option more than once!";
                 }
               
             }
-            //ViewData["error"] = choice.FourthChoiceOptionId;
+
+            if(!notEntered)
+            {
+                ViewData["term_error"] = "Already entered into term!";
+            }
+
+            if (!choicesDiff)
+            {
+                ViewData["choice_error"] = "Cannot choose a course option more than once!";
+            }
+
             var options = db.Options.Where(p => p.IsActive);
 
             string currentUserId = User.Identity.GetUserId();
             ApplicationUser currentUser = userdb.Users.FirstOrDefault(x => x.Id == currentUserId);
             ViewBag.StudentId = currentUser.UserName;
 
+            ViewBag.YearTerm = term + " " + yearTerm.Year;
             ViewBag.FirstChoiceOptionId = new SelectList(options, "OptionId", "Title", choice.FirstChoiceOptionId);
             ViewBag.FourthChoiceOptionId = new SelectList(options, "OptionId", "Title", choice.FourthChoiceOptionId);
             ViewBag.SecondChoiceOptionId = new SelectList(options, "OptionId", "Title", choice.SecondChoiceOptionId);
@@ -153,6 +188,10 @@ namespace DiplomaOptions.Controllers
             {
                 return HttpNotFound();
             }
+            string currentUserId = User.Identity.GetUserId();
+            ApplicationUser currentUser = userdb.Users.FirstOrDefault(x => x.Id == currentUserId);
+            ViewBag.StudentId = currentUser.UserName;
+
             ViewBag.FirstChoiceOptionId = new SelectList(options, "OptionId", "Title", choice.FirstChoiceOptionId);
             ViewBag.FourthChoiceOptionId = new SelectList(options, "OptionId", "Title", choice.FourthChoiceOptionId);
             ViewBag.SecondChoiceOptionId = new SelectList(options, "OptionId", "Title", choice.SecondChoiceOptionId);

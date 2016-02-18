@@ -14,9 +14,10 @@ namespace DiplomaDataModel.CourseOption
         [HiddenInput(DisplayValue = false)]
         public int ChoiceId { get; set; }
 
-        [HiddenInput(DisplayValue = false)]
         [ForeignKey("YearTerm")]
+        [HiddenInput(DisplayValue = false)]
         public int? YearTermId { get; set; }
+
         [ForeignKey("YearTermId")]
         public YearTerm YearTerm { get; set; }
 

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using DiplomaDataModel.CourseOption;
 
@@ -49,8 +45,19 @@ namespace DiplomaOptions.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "YearTermId,Year,Term,IsDefault")] YearTerm yearTerm)
         {
+            var yearterms = db.YearTerms;
             if (ModelState.IsValid)
             {
+                if (yearTerm.IsDefault)
+                {
+                    foreach (var y in yearterms)
+                    {
+                        if (y.IsDefault && y.YearTermId != yearTerm.YearTermId)
+                        {
+                            y.IsDefault = false;
+                        }
+                    }
+                }
                 db.YearTerms.Add(yearTerm);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -81,9 +88,22 @@ namespace DiplomaOptions.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "YearTermId,Year,Term,IsDefault")] YearTerm yearTerm)
         {
+            var yearterms = db.YearTerms;    
+
             if (ModelState.IsValid)
             {
                 db.Entry(yearTerm).State = EntityState.Modified;
+                if (yearTerm.IsDefault)
+                {
+                    foreach (var y in yearterms)
+                    {
+                        if(y.IsDefault && y.YearTermId != yearTerm.YearTermId)
+                        {
+                            y.IsDefault = false;
+                        }
+                    }
+                }
+        
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

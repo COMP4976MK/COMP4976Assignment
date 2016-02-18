@@ -293,8 +293,6 @@
     <Content Include="Views\YearTerms\Details.cshtml" />
     <Content Include="Views\YearTerms\Edit.cshtml" />
     <Content Include="Views\YearTerms\Index.cshtml" />
-    <Content Include="Views\YearTerms\EditorTemplates\YearDropDown.cshtml" />
-    <Content Include="Views\YearTerms\EditorTemplates\TermDropDown.cshtml" />
     <Content Include="Views\Options\Create.cshtml" />
     <Content Include="Views\Options\Delete.cshtml" />
     <Content Include="Views\Options\Details.cshtml" />

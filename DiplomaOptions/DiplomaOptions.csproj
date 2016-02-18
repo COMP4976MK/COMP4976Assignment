@@ -199,6 +199,7 @@
     <Compile Include="Controllers\ChoicesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OptionsController.cs" />
     <Compile Include="Controllers\YearTermsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -208,6 +209,11 @@
       <DependentUpon>201602150858322_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\CourseOptionMigrations\Configuration.cs" />
+    <Compile Include="Migrations\UserMigrations\201602162106583_UserInitialCreate.cs" />
+    <Compile Include="Migrations\UserMigrations\201602162106583_UserInitialCreate.Designer.cs">
+      <DependentUpon>201602162106583_UserInitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\UserMigrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -287,9 +293,14 @@
     <Content Include="Views\YearTerms\Details.cshtml" />
     <Content Include="Views\YearTerms\Edit.cshtml" />
     <Content Include="Views\YearTerms\Index.cshtml" />
-    <Content Include="Views\YearTerms\Choose.cshtml" />
     <Content Include="Views\YearTerms\EditorTemplates\YearDropDown.cshtml" />
     <Content Include="Views\YearTerms\EditorTemplates\TermDropDown.cshtml" />
+    <Content Include="Views\Options\Create.cshtml" />
+    <Content Include="Views\Options\Delete.cshtml" />
+    <Content Include="Views\Options\Details.cshtml" />
+    <Content Include="Views\Options\Edit.cshtml" />
+    <Content Include="Views\Options\Index.cshtml" />
+    <Content Include="Views\Choices\EditorTemplates\Default.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -311,6 +322,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\CourseOptionMigrations\201602150858322_InitialCreate.resx">
       <DependentUpon>201602150858322_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\UserMigrations\201602162106583_UserInitialCreate.resx">
+      <DependentUpon>201602162106583_UserInitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

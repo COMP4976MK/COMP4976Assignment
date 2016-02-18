@@ -57,6 +57,16 @@ namespace DiplomaOptions.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if (HttpContext.Request.IsAuthenticated)
+            {
+                if (User.IsInRole("Admin")) {
+                    return RedirectToAction("Index", "Choices");
+                } else
+                {
+                    return RedirectToAction("Create", "Choices");
+                }
+            }
+
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -79,7 +89,14 @@ namespace DiplomaOptions.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    if (User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("Index", "Choices");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Create", "Choices");
+                    }
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:

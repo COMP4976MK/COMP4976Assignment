@@ -68,7 +68,7 @@
             @Html.DisplayFor(modelItem => item.StudentLastName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.SelectionDate)
+            @Html.DisplayFor(modelItem => item.SelectionDate.Date)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ChoiceId }) |

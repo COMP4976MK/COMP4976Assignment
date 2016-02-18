@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="CourseOption\Choice.cs" />
     <Compile Include="CourseOption\CourseOptionContext.cs" />
+    <Compile Include="CourseOption\CustomValidation\CompareOptions.cs" />
     <Compile Include="CourseOption\CustomValidation\StartWith.cs" />
     <Compile Include="CourseOption\Option.cs" />
     <Compile Include="CourseOption\Seed\InitialOptionData.cs" />

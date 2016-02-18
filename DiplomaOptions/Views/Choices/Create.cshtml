@@ -1,14 +1,16 @@
 ﻿@model DiplomaDataModel.CourseOption.Choice
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Choose your Course Options";
 }
-
+<h1>@ViewBag.Title</h1>
+<p class="choice_error">@ViewData["choice_error"]</p>
+<p class="choice_error">@ViewData["term_error"]</p>
 @using (Html.BeginForm())
 {
     <fieldset>
         @Html.AntiForgeryToken()
-        <legend>@ViewBag.Title</legend>
+        <legend>@ViewBag.YearTerm</legend>
         @Html.EditorForModel()
         <p><input type="submit" value="Save" /></p>
     </fieldset>

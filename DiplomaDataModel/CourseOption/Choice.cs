@@ -20,10 +20,11 @@ namespace DiplomaDataModel.CourseOption
         [ForeignKey("YearTermId")]
         public YearTerm YearTerm { get; set; }
 
-        [ReadOnly(true)]
+        [UIHint("Default")]
         [Display(Name = "Student Number: ")]
         [StartWith("A00", ErrorMessage = "Student ID needs to start with A00")]
-        [MaxLength(9, ErrorMessage = "Max Legnth 9 Characters")]
+        [MaxLength(9, ErrorMessage = "Max Length 9 Characters")]
+        [Required(ErrorMessage = "Student number is required.")]
         public string StudentId { get; set; }
 
         [Required(ErrorMessage = "First name is required.")]
@@ -67,6 +68,7 @@ namespace DiplomaDataModel.CourseOption
         public Option FourthOption { get; set; }
 
         [HiddenInput(DisplayValue = false)]
+        [DataType(DataType.Date)]
         public DateTime SelectionDate { get; set; }
 
         public ICollection<Option> Options { get; set; }

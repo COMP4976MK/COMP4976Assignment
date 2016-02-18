@@ -8,14 +8,18 @@ using System.Web;
 using System.Web.Mvc;
 using DiplomaDataModel.CourseOption;
 using DiplomaDataModel.CourseOption.Seed;
+using Microsoft.AspNet.Identity;
+using DiplomaOptions.Models;
 
 namespace DiplomaOptions.Controllers
 {
     public class ChoicesController : Controller
     {
         private CourseOptionContext db = new CourseOptionContext();
+        private ApplicationDbContext userdb = new ApplicationDbContext();
 
         // GET: Choices
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             var choices = db.Choices.Include(c => c.FirstOption).Include(c => c.FourthOption).Include(c => c.SecondOption).Include(c => c.ThirdOption).Include(c => c.YearTerm);
@@ -23,6 +27,7 @@ namespace DiplomaOptions.Controllers
         }
 
         // GET: Choices/Details/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -34,19 +39,31 @@ namespace DiplomaOptions.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.FirstChoiceOption = choice.FirstChoiceOptionId;
+            ViewBag.FourthChoiceOption = choice.FourthChoiceOptionId;
+            ViewBag.SecondChoiceOption = choice.SecondChoiceOptionId;
+            ViewBag.ThirdChoiceOption = choice.ThirdChoiceOptionId;
+            ViewBag.YearTermId = choice.YearTermId;
             return View(choice);
         }
 
         // GET: Choices/Create
+        [Authorize(Roles = "Student, Admin")]
         public ActionResult Create()
         {
             var options = db.Options.Where(p => p.IsActive);
+            var yearTerm = db.YearTerms.FirstOrDefault(p => p.IsDefault);
 
+            string currentUserId = User.Identity.GetUserId();
+            ApplicationUser currentUser = userdb.Users.FirstOrDefault(x => x.Id == currentUserId);
+            ViewBag.StudentId = currentUser.UserName;
+
+            ViewBag.YearTerm = yearTerm.Year + " " + yearTerm.Term;
             ViewBag.FirstChoiceOptionId = new SelectList(options, "OptionId", "Title");
             ViewBag.FourthChoiceOptionId = new SelectList(options, "OptionId", "Title");
             ViewBag.SecondChoiceOptionId = new SelectList(options, "OptionId", "Title");
             ViewBag.ThirdChoiceOptionId = new SelectList(options, "OptionId", "Title");
-            ViewBag.YearTermId = new SelectList(db.YearTerms, "YearTermId", "YearTermId");
+            //ViewBag.YearTermId = new SelectList(db.YearTerms, "YearTermId", "YearTermId");
             return View();
         }
 
@@ -55,26 +72,74 @@ namespace DiplomaOptions.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "YearTermId,StudentId,StudentFirstName,StudentLastName,FirstChoiceOptionId,SecondChoiceOptionId,ThirdChoiceOptionId,FourthChoiceOptionId,SelectionDate")] Choice choice)
+        [Authorize(Roles = "Student, Admin")]
+        public ActionResult Create([Bind(Include = "StudentId,StudentFirstName,StudentLastName,FirstChoiceOptionId,SecondChoiceOptionId,ThirdChoiceOptionId,FourthChoiceOptionId")] Choice choice)
         {
-           
-            if (ModelState.IsValid)
-            {
-                choice.SelectionDate = DateTime.Now;
-                db.Choices.Add(choice);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+            bool choicesDiff;
+            bool notEntered = true;
+
+            var yearTerm = db.YearTerms.FirstOrDefault(p => p.IsDefault);
+
+            var choiceTable = db.Choices.FirstOrDefault(c => c.YearTermId == yearTerm.YearTermId);
+
+            //look 
+            if (choiceTable.YearTermId != null) { 
+                
+                 notEntered = false;
+                
             }
 
-            ViewBag.FirstChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.FirstChoiceOptionId);
-            ViewBag.FourthChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.FourthChoiceOptionId);
-            ViewBag.SecondChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.SecondChoiceOptionId);
-            ViewBag.ThirdChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.ThirdChoiceOptionId);
+            //Checking if the choices are different from each other
+            if ((choice.FirstChoiceOptionId != choice.SecondChoiceOptionId && choice.FirstChoiceOptionId != choice.ThirdChoiceOptionId &&
+                     choice.FirstChoiceOptionId != choice.FourthChoiceOptionId) && (choice.SecondChoiceOptionId != choice.ThirdChoiceOptionId
+                     && choice.SecondChoiceOptionId != choice.FourthChoiceOptionId) && (choice.ThirdChoiceOptionId != choice.FirstChoiceOptionId))
+            {
+                choicesDiff = true;
+            }
+            else
+            {
+                choicesDiff = false;
+            }
+
+            if (ModelState.IsValid)
+            {
+                //if choices are different and not entered in year/term already else give back error
+                if(choicesDiff)
+                {
+                    if(notEntered)
+                    {
+                        choice.YearTermId = yearTerm.YearTermId;
+                        choice.SelectionDate = DateTime.Now;
+                        db.Choices.Add(choice);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    } else
+                    {
+                        ViewData["term_error"] = "Already entered into term!";
+                    }
+                } else
+                {
+                    ViewData["choice_error"] = "Cannot choose a course option more than once!";
+                }
+              
+            }
+            //ViewData["error"] = choice.FourthChoiceOptionId;
+            var options = db.Options.Where(p => p.IsActive);
+
+            string currentUserId = User.Identity.GetUserId();
+            ApplicationUser currentUser = userdb.Users.FirstOrDefault(x => x.Id == currentUserId);
+            ViewBag.StudentId = currentUser.UserName;
+
+            ViewBag.FirstChoiceOptionId = new SelectList(options, "OptionId", "Title", choice.FirstChoiceOptionId);
+            ViewBag.FourthChoiceOptionId = new SelectList(options, "OptionId", "Title", choice.FourthChoiceOptionId);
+            ViewBag.SecondChoiceOptionId = new SelectList(options, "OptionId", "Title", choice.SecondChoiceOptionId);
+            ViewBag.ThirdChoiceOptionId = new SelectList(options, "OptionId", "Title", choice.ThirdChoiceOptionId);
             ViewBag.YearTermId = new SelectList(db.YearTerms, "YearTermId", "YearTermId", choice.YearTermId);
             return View(choice);
         }
 
         // GET: Choices/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             var options = db.Options.Where(p => p.IsActive);
@@ -101,6 +166,7 @@ namespace DiplomaOptions.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit([Bind(Include = "ChoiceId,YearTermId,StudentId,StudentFirstName,StudentLastName,FirstChoiceOptionId,SecondChoiceOptionId,ThirdChoiceOptionId,FourthChoiceOptionId,SelectionDate")] Choice choice)
         {
             if (ModelState.IsValid)
@@ -118,6 +184,7 @@ namespace DiplomaOptions.Controllers
         }
 
         // GET: Choices/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

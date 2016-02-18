@@ -11,107 +11,107 @@ using DiplomaDataModel.CourseOption;
 namespace DiplomaOptions.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class YearTermsController : Controller
+    public class OptionsController : Controller
     {
         private CourseOptionContext db = new CourseOptionContext();
 
-        // GET: YearTerms
+        // GET: Options
         public ActionResult Index()
         {
-            return View(db.YearTerms.ToList());
+            return View(db.Options.ToList());
         }
 
-        // GET: YearTerms/Details/5
+        // GET: Options/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            YearTerm yearTerm = db.YearTerms.Find(id);
-            if (yearTerm == null)
+            Option option = db.Options.Find(id);
+            if (option == null)
             {
                 return HttpNotFound();
             }
-            return View(yearTerm);
+            return View(option);
         }
 
-        // GET: YearTerms/Create
+        // GET: Options/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: YearTerms/Create
+        // POST: Options/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "YearTermId,Year,Term,IsDefault")] YearTerm yearTerm)
+        public ActionResult Create([Bind(Include = "OptionId,Title,IsActive")] Option option)
         {
             if (ModelState.IsValid)
             {
-                db.YearTerms.Add(yearTerm);
+                db.Options.Add(option);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(yearTerm);
+            return View(option);
         }
 
-        // GET: YearTerms/Edit/5
+        // GET: Options/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            YearTerm yearTerm = db.YearTerms.Find(id);
-            if (yearTerm == null)
+            Option option = db.Options.Find(id);
+            if (option == null)
             {
                 return HttpNotFound();
             }
-            return View(yearTerm);
+            return View(option);
         }
 
-        // POST: YearTerms/Edit/5
+        // POST: Options/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "YearTermId,Year,Term,IsDefault")] YearTerm yearTerm)
+        public ActionResult Edit([Bind(Include = "OptionId,Title,IsActive")] Option option)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(yearTerm).State = EntityState.Modified;
+                db.Entry(option).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(yearTerm);
+            return View(option);
         }
 
-        // GET: YearTerms/Delete/5
+        // GET: Options/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            YearTerm yearTerm = db.YearTerms.Find(id);
-            if (yearTerm == null)
+            Option option = db.Options.Find(id);
+            if (option == null)
             {
                 return HttpNotFound();
             }
-            return View(yearTerm);
+            return View(option);
         }
 
-        // POST: YearTerms/Delete/5
+        // POST: Options/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            YearTerm yearTerm = db.YearTerms.Find(id);
-            db.YearTerms.Remove(yearTerm);
+            Option option = db.Options.Find(id);
+            db.Options.Remove(option);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
